@@ -28,16 +28,30 @@ def player_action(player, deckinuse):
             print("Please enter h or s")
     return player, deckinuse
     
-def dealer_action(dealer, deckinuse):
-    print("hold")
+def dealer_action(dealer, hidden_card, deckinuse):
+    actual_dealer = dealer[:]
+    actual_dealer.remove("?")
+    actual_dealer.add(hidden_card)
+    total_score = 0
+    ace_active = False
+    for i in actual_dealer:
+        try:
+            total_score+= int(actual_dealer[i])
+        except TypeError as e:
+            if actual_dealer[i] == "J" or "Q" or "K":
+                total_score+=10
+            elif actual_dealer[i] == "A":
+                total_score+=11
+                ace_active = True
+    if total_score < 17:
+        hit_card = deckinuse.pop()
 
 
 def main():
     deckinuse = start()
     player, dealer, hidden_card = deal(deckinuse)
     player, deckinuse = player_action(player, deckinuse)
-
-
+    dealer_action(dealer, hidden_card, deckinuse)
 
 
 main()
